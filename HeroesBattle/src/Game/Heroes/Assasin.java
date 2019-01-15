@@ -1,6 +1,9 @@
+package Game.Heroes;
+
+import Game.Realisation.Team;
 import java.util.Random;
 
-class Assasin extends Hero {    //Класс убийца для создания конкретной реализации героя
+public class Assasin extends Hero {   //Класс убийца для создания конкретной реализации героя
     int cricitalHit;
     Random random = new Random();
 
@@ -10,11 +13,11 @@ class Assasin extends Hero {    //Класс убийца для создани�
     }
 
     @Override
-    void hit(Hero hero) {
+    public void hit(Hero hero) {
         // если герой не он сам, он может ударить
         if (hero != this) {
             // если герой который бьет жив, он может ударить
-            if (this.health <= 0) {
+            if (health <= 0) {
                 return;
             } else {
                 if (cricitalHit == 4) {
@@ -22,14 +25,14 @@ class Assasin extends Hero {    //Класс убийца для создани�
                 } else {
                     hero.causeDamage(damage);
                 }
-
             }
-            GameWindow.setTextToArea(this.name + " из команды " + this.getTeam().getTeamName() + " нанес урон герою " + hero.name + " из " + hero.getTeam().getTeamName() + "(осталось " + hero.health + " НР)" );
+            this.damageInfo(hero);
         }
     }
 
     @Override
-    void healing(Team hero) {
-        GameWindow.setTextToArea("Убийцы не умеют лечить!");
+    public void healing(Team hero) {
+        this.getTeam().getGame().printText("Убийцы не умеют лечить!");
+        System.out.println("Убийцы не умеют лечить!");
     }
 }

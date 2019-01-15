@@ -1,5 +1,9 @@
+package Game.Realisation;
+
+import Game.Heroes.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class ComboBoxActionListener implements ActionListener {
     private GameComboBox comboBox;
@@ -14,11 +18,14 @@ public class ComboBoxActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Team heroesTeam = new Team("");
+
+        ArrayList<Hero> heroesTeam = new ArrayList<>();
         heroesTeam.add(new Warrior(team));
         heroesTeam.add(new Assasin(team));
         heroesTeam.add(new Mage(team));
         heroesTeam.add(new Healer(team));
+        heroesTeam.add(new Archer(team));
+        heroesTeam.add(new Guardian(team));
 
         String x = comboBox.getSelectedItem().toString();
 

@@ -1,8 +1,10 @@
+package Game.Realisation;
+
 import javax.swing.*;
 
 public class GameComboBox extends JComboBox {
-    private Team team;
-    private int indexBox;
+    Team team;
+    int indexBox;
 
     public GameComboBox(String[] items, Team team, int indexBox) {
         super(items);

@@ -1,3 +1,5 @@
+package Game.Realisation;
+
 import javax.swing.*;
 
 public class GameButton extends JButton {

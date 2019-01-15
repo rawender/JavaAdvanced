@@ -1,12 +1,21 @@
+package Game.Realisation;
+
+import Game.Heroes.Hero;
 import java.util.ArrayList;
 
 public class Team {
     String teamName;
     ArrayList<Hero> heroesTeam;
+    GameWindow game;
 
-    public Team( String teamName) {
+    public Team( String teamName, GameWindow game) {
         this.teamName = teamName;
         this.heroesTeam = new ArrayList <>();
+        this.game = game;
+    }
+
+    public GameWindow getGame() {
+        return game;
     }
 
     public String getTeamName() {
@@ -39,8 +48,9 @@ public class Team {
         return count;
     }
 
-    public boolean checkHpHeroes() {
+    public boolean checkFullHpHeroes() {
         boolean result = true;
+
         for (int i = 0; i < this.size(); i++) {
             if (this.get(i).health < this.get(i).getMaxHealth()) {
                 result = false;
@@ -52,10 +62,9 @@ public class Team {
     public Hero getLowHpHero() {
         Hero hero = null;
         for (int i = 0; i < this.size(); i++) {
-            if (this.get(i).health <= this.get(i).getMaxHealth() && this.get(i).health > 0) {
+            if (this.get(i).health > 0 && this.get(i).health <= this.get(i).getMaxHealth()) {
                 hero = this.get(i);
             }
-        }
-        return hero;
+        }return hero;
     }
 }

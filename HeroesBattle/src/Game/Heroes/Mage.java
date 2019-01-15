@@ -1,3 +1,7 @@
+package Game.Heroes;
+
+import Game.Realisation.Team;
+
 public class Mage extends Hero {
 
     public Mage(Team team) {
@@ -5,7 +9,7 @@ public class Mage extends Hero {
     }
 
     @Override
-    void hit(Hero hero) {
+    public void hit(Hero hero) {
         // если герой не он сам, он может ударить
         if (hero != this) {
             // если герой который бьет жив, он может ударить
@@ -14,12 +18,13 @@ public class Mage extends Hero {
             } else {
                 hero.causeDamage(damage);
             }
-            GameWindow.setTextToArea(this.name + " из команды " + this.getTeam().getTeamName() + " нанес урон герою " + hero.name + " из " + hero.getTeam().getTeamName() + "(осталось " + hero.health + " НР)");
+            this.damageInfo(hero);
         }
     }
 
     @Override
-    void healing(Team hero) {
-        GameWindow.setTextToArea("Волшебники не умеют лечить!");
+    public void healing(Team hero) {
+        this.getTeam().getGame().printText("Волшебники не умеют лечить!");
+        System.out.println("Волшебники не умеют лечить!");
     }
 }
