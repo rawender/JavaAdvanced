@@ -1,7 +1,6 @@
 package Game.Realisation;
 
 import Game.Heroes.Healer;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -17,7 +16,7 @@ public class ButtonActionListener implements ActionListener {
         this.team1 = teamBlue;
         this.team2 = teamRed;
     }
-    //Game.Realisation.GameWindow.setTextToArea
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // выбираем кто будет первый ходить

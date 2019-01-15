@@ -61,10 +61,13 @@ public class Team {
 
     public Hero getLowHpHero() {
         Hero hero = null;
+        int lowHpHeroIndex = 0;
         for (int i = 0; i < this.size(); i++) {
             if (this.get(i).health > 0 && this.get(i).health <= this.get(i).getMaxHealth()) {
-                hero = this.get(i);
-            }
+                if (this.get(i).health < this.get(lowHpHeroIndex).health) {
+                    lowHpHeroIndex = i;
+                }
+            }hero = this.get(lowHpHeroIndex);
         }return hero;
     }
 }

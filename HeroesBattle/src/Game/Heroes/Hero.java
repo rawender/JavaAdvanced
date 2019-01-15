@@ -1,7 +1,6 @@
 package Game.Heroes;
 
 import Game.Realisation.Team;
-
 import java.util.Random;
 
 public abstract class Hero {    //Абстрактный класс родитель для создания героев
