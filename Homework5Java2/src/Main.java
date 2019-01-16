@@ -3,23 +3,28 @@ public class Main {
     static final int size = 10000000;
     static final int h = size / 2;
 
-    static float[] fillArray(float[] arr) {
+    static void fillArray(float[] arr) {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = 1;
         }
+
         long a = System.currentTimeMillis();
+
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (float)(arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
         }
         System.out.println(System.currentTimeMillis() - a);
-        return arr;
     }
 
     static void disassembleAssemble(float[] arr) {
         float[] a1 = new float[h];
         float[] a2 = new float[h];
 
-        long b = System.currentTimeMillis();
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = 1;
+        }
+
+        long a = System.currentTimeMillis();
 
         Thread t1 = new Thread(new Runnable() {
             @Override
@@ -45,19 +50,24 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println(System.currentTimeMillis() - b);
+        long b = System.currentTimeMillis();
+        System.out.println(b - a);
 
         Thread t3 = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.arraycopy(a1,0,arr,0,h);
+                for (int i = 0; i < a1.length; i++) {
+                    a1[i] = (float)(a1[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+                }
             }
         });
 
         Thread t4 = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.arraycopy(a2,0,arr,h,h);
+                for (int i = 0; i < a2.length; i++) {
+                    a2[i] = (float)(a2[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+                }
             }
         });
 
@@ -71,7 +81,35 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println(System.currentTimeMillis() - b);
+
+        long c = System.currentTimeMillis();
+        System.out.println(c - b);
+
+        Thread t5 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.arraycopy(a1,0,arr,0,h);
+            }
+        });
+
+        Thread t6 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.arraycopy(a2,0,arr,h,h);
+            }
+        });
+
+        t5.start();
+        t6.start();
+
+        try {
+            t5.join();
+            t6.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(System.currentTimeMillis() - c);
     }
 
     public static void main(String[] args) {
