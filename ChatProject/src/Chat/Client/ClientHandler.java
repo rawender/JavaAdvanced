@@ -34,10 +34,15 @@ public class ClientHandler {
                                 String[] tokens = str.split(" ");
                                 String newNick = AuthService.getNickLoginAndPass(tokens[1], tokens[2]);
                                 if (newNick != null) {
-                                    sendMsg("/authok");
-                                    nick = newNick;
-                                    server.subscribe(ClientHandler.this);
-                                    break;
+                                    if (server.ifAccountVacant(newNick)) {
+                                        sendMsg("/authok");
+                                        nick = newNick;
+                                        server.subscribe(nick, ClientHandler.this);
+                                        sendMsg("Вы вошли в чат!");
+                                        break;
+                                    } else {
+                                        sendMsg("Аккаунт уже используется!");
+                                    }
                                 } else {
                                     sendMsg("Неверный логин/пароль!");
                                 }
@@ -50,7 +55,15 @@ public class ClientHandler {
                                 out.writeUTF("/serverClosed");
                                 break;
                             }
-                            server.broadcastMsg(str);
+                            if(str.startsWith("/w ")) {
+                                String[] tokens = str.split(" ", 3);
+                                String privNick = tokens[1];
+                                String msg = tokens[2];
+                                server.privMsg(ClientHandler.this, privNick, msg);
+                            } else {
+                                server.broadcastMsg(ClientHandler.this, str);
+                            }
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -70,7 +83,7 @@ public class ClientHandler {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        server.unsubscribe(ClientHandler.this);
+                        server.unsubscribe(nick);
                     }
 
                 }
@@ -80,9 +93,29 @@ public class ClientHandler {
         }
     }
 
+    public String getNick() {
+        return nick;
+    }
+
     public void sendMsg(String msg) {
         try {
             out.writeUTF(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendSignMsg(String nickname, String msg) {
+        try {
+            out.writeUTF(nickname + ": " + msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendPrivMsg(String nickname, String msg) {
+        try {
+            out.writeUTF(nickname + " шепчет: " + msg);
         } catch (IOException e) {
             e.printStackTrace();
         }

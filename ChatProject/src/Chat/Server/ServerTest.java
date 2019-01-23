@@ -5,13 +5,14 @@ import Chat.Client.ClientHandler;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerTest {
-    private Vector<ClientHandler> clients;
+    private HashMap<String, ClientHandler> clients;
 
     public ServerTest(){
-        clients = new Vector<>();
+        clients = new HashMap <>();
         ServerSocket server = null;
         Socket socket = null;
 
@@ -42,17 +43,51 @@ public class ServerTest {
         }
     }
 
-    public void subscribe(ClientHandler client) {
-        clients.add(client);
+    public void subscribe(String nick, ClientHandler client) {
+        clients.put(nick, client);
     }
 
-    public void unsubscribe(ClientHandler client) {
-        clients.remove(client);
+    public void unsubscribe(String nick) {
+        clients.remove(nick);
     }
 
-    public void broadcastMsg(String msg) {
-        for (ClientHandler o: clients) {
-            o.sendMsg(msg);
+    public void broadcastMsg(ClientHandler sender, String msg) {
+        for (ClientHandler o: clients.values()) {
+            if (o == sender) {
+                o.sendMsg(msg);
+            } else {
+                o.sendSignMsg(sender.getNick(), msg);
+            }
         }
+    }
+
+    public boolean ifAccountVacant(String nick){
+        for (String o: clients.keySet()) {
+            if (o.equals(nick)) {
+                return false;
+            }
+        }return true;
+    }
+
+    public void privMsg(ClientHandler sender, String nick, String msg) {
+        if (notFind(nick)){
+            sender.sendMsg("Пользователь отсутствует.");
+        } else if (sender.getNick().equals(nick)) {
+            sender.sendMsg("Невозможно выполнить.");
+        } else {
+            for (Map.Entry<String, ClientHandler> o: clients.entrySet()) {
+                if (o.getKey().equals(nick)) {
+                    o.getValue().sendPrivMsg(sender.getNick(), msg);
+                }
+            }
+        }
+    }
+
+    private boolean notFind(String nick) {
+        for (String o: clients.keySet()) {
+            if (o.equals(nick)) {
+                return false;
+            }
+        }return true;
     }
 }

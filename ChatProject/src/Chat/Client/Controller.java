@@ -77,7 +77,8 @@ public class Controller {
 
                         while (true) {
                             String str = in.readUTF();
-                            if(str.equals("/serverClosed")) break;
+                            if(str.equals("/serverClosed"))
+                                break;
                             textArea.appendText(str + "\n");
                         }
 
